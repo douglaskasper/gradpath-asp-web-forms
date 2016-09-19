@@ -19,6 +19,21 @@
 		Class meeting times.
 */
 
+/*
+DROP TABLE `degree_requirement`;
+DROP TABLE `class_meeting_time`;
+DROP TABLE `class`;
+DROP TABLE `course_prerequisite`;
+DROP TABLE `course`;
+DROP TABLE `department`;
+DROP TABLE `degree`;
+DROP TABLE `classroom`;
+DROP TABLE `building`;
+DROP TABLE `campus`;
+DROP TABLE `account_path_search`;
+DROP TABLE `account`;
+*/
+
 CREATE TABLE `account` (
 	`username` VARCHAR(50) NOT NULL,
 	`password` CHAR(128) NOT NULL,
@@ -106,7 +121,7 @@ CREATE TABLE `course_prerequisite` (
 	REFERENCES `course`(`id`, `department_code`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE `class` (
+CREATE TABLE `course_class` (
 	`id` INT AUTO_INCREMENT NOT NULL,
 	`section_number` CHAR(5),
 	`course_id` INT NOT NULL,
@@ -114,12 +129,17 @@ CREATE TABLE `class` (
 	`date_start` DATE,
 	`date_end` DATE,
 	`status` VARCHAR(10), /*[OPEN, WAIT_LIST etc.]*/
-	`classroom_id` INT,
+    `building_name` VARCHAR(20),
+	`classroom_number` INT,
+    `classroom_section` CHAR(10),
 	`instructor_account_username` VARCHAR(50) NOT NULL,
 	PRIMARY KEY (`id`),
 	CONSTRAINT `fk_class_course`
 	FOREIGN KEY (`course_id`, `course_department_code`)
 	REFERENCES `course`(`id`, `department_code`),
+    CONSTRAINT `fk_class_classroom`
+	FOREIGN KEY (`building_name`, `classroom_number`, `classroom_section`)
+	REFERENCES `classroom`(`building_name`, `number`, `section`),
 	CONSTRAINT `fk_class_account_instructor`
 	FOREIGN KEY (`instructor_account_username`)
 	REFERENCES `account`(`username`)
@@ -133,7 +153,7 @@ CREATE TABLE `class_meeting_time` (
 	PRIMARY KEY (`class_id`, `day_of_week`),
 	CONSTRAINT `fk_class_meeting_time_class`
 	FOREIGN KEY (`class_id`)
-	REFERENCES `class`(`id`)
+	REFERENCES `course_class`(`id`)
 ) ENGINE = InnoDB;
 
 CREATE TABLE `degree_requirement` (
@@ -143,8 +163,12 @@ CREATE TABLE `degree_requirement` (
 	`status` CHAR(10) NOT NULL DEFAULT 'REQUIRED',
 	`elective_department_code` CHAR(3),
 	PRIMARY KEY (`degree_name`, `course_id`, `course_department_code`),
+    CONSTRAINT `fk_degree_requirement_degree`
+	FOREIGN KEY (`degree_name`)
+	REFERENCES `degree`(`name`),
 	CONSTRAINT `fk_degree_requirement_course`
 	FOREIGN KEY (`course_id`, `course_department_code`)
 	REFERENCES `course`(`id`, `department_code`),
 	FOREIGN KEY (`elective_department_code`) REFERENCES `department`(`code`)
 ) ENGINE = InnoDB;
+
