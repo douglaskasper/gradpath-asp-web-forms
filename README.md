@@ -1,14 +1,13 @@
 ﻿# CSC 394 - Capstone Project, DePaul Graduation Path
 
-##Website
+### Website
 ASP.NET (C#) Web App.
 
-##Database
+### Database
 Currently using SQLite database, located in \App_Data. This will be replaced by a MySQL(most likely) database. SQL database creation and scripts in \Database.
 
-##Project Requirements
-
-<b>UI</b>
+### Project Requirements
+#### UI
 > * Student
 >   * This is like WhatIf? Plus for graduate SOC MS students. In CS or IS.  It allows a student to test scenarios based on various choices (#classes per quarter, course delivery, etc.)
 >   * Student Login/Logout
@@ -33,7 +32,7 @@ Currently using SQLite database, located in \App_Data. This will be replaced by 
 >   * Select/change degree selection
 >   * Select/change number of courses taken per quarter (1,2,3)
 
-<b>Logic</b>
+#### Logic
 > * Path algorithm
 >   * Plot optimum shortest path to graduation based on degree, prereqs, quarters classes are offered
 >   * If multiple possible courses choices at any point (e.g. choose 1 of the following electives – list them)
@@ -47,7 +46,7 @@ Currently using SQLite database, located in \App_Data. This will be replaced by 
 >		* Delivery choice– online, classroom, both 
 >		* AND from the course descriptions and online syllabus info quarter offered (look at last 2 years)
 
-<b>Data</b>
+#### Data
 > * Course (available online)
 >   * Course #, People Soft #, Description, Prereqs, Quarters offered (check last 2 years -
 >   * If it hasn't been offered then mark it as dormant – a problem with electives)
@@ -58,7 +57,7 @@ Currently using SQLite database, located in \App_Data. This will be replaced by 
 >   * # courses taking per quarter
 > * Others
 
-<b>Non-functional</b>
+#### Non-functional
 > * Usability/Interface
 > * Reliability
 > * Performance
