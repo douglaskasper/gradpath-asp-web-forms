@@ -4,7 +4,7 @@
 ASP.NET (C#) Web App.
 
 ### Database
-Currently using SQLite database, located in \App_Data. This will be replaced by a MySQL(most likely) database. SQL database creation and scripts in \Database.
+Currently using SQLite database, located in `\App_Data`. This will be replaced by a MySQL(most likely) database. SQL database creation and scripts in `\Database`.
 
 ### Project Requirements
 #### UI
