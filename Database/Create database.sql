@@ -17,6 +17,9 @@
 		Degree requirements.
 		Classes previously offered and upcoming.
 		Class meeting times.
+
+	If incoming student doesn't have any background, faculty can fill out courses already taken/passed.
+	Need to be able to plot out previously taken classes.
 */
 
 /*
@@ -32,6 +35,10 @@ DROP TABLE `building`;
 DROP TABLE `campus`;
 DROP TABLE `account_path_search`;
 DROP TABLE `account`;
+*/
+
+/*
+	Add id to account, maybe auto increment.
 */
 
 CREATE TABLE `account` (
