@@ -25,7 +25,7 @@
 /*
 DROP TABLE `degree_requirement`;
 DROP TABLE `class_meeting_time`;
-DROP TABLE `class`;
+DROP TABLE `course_class`;
 DROP TABLE `course_prerequisite`;
 DROP TABLE `course`;
 DROP TABLE `department`;
@@ -37,28 +37,26 @@ DROP TABLE `account_path_search`;
 DROP TABLE `account`;
 */
 
-/*
-	Add id to account, maybe auto increment.
-*/
-
 CREATE TABLE `account` (
+	`id` INT NOT NULL,
 	`username` VARCHAR(50) NOT NULL,
 	`password` CHAR(128) NOT NULL,
 	`first_name` VARCHAR(50) NOT NULL,
 	`last_name` VARCHAR(50) NOT NULL,
 	`role` VARCHAR(10) NOT NULL, /*[STUDENT, FACULTY, ADMIN]*/
-	PRIMARY KEY (`username`)
+	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
 CREATE TABLE `account_path_search` (
-	`account_username` VARCHAR(50) NOT NULL,
+    `id` INT AUTO_INCREMENT NOT NULL,
 	`option` VARCHAR(50) NOT NULL, /*[DEGREE, CONCENTRATION, ENTERING_QUARTER, COURSES_PER_QUARTER, DELIVERY_METHOD]*/
 	`value` VARCHAR(1000),
-	PRIMARY KEY (`account_username`, `option`),
+    `account_id` INT NOT NULL,
+	PRIMARY KEY (`id`, `option`),
 	/*FOREIGN KEY (`username`) REFERENCES `account`(`username`)*/
 	CONSTRAINT `fk_account_path_search_account`
-	FOREIGN KEY (`account_username`)
-	REFERENCES `account`(`username`)
+	FOREIGN KEY (`account_id`)
+	REFERENCES `account`(`id`)
 ) ENGINE = InnoDB;
 
 CREATE TABLE `campus` (
@@ -139,7 +137,7 @@ CREATE TABLE `course_class` (
     `building_name` VARCHAR(20),
 	`classroom_number` INT,
     `classroom_section` CHAR(10),
-	`instructor_account_username` VARCHAR(50) NOT NULL,
+	`instructor_account_id` INT NOT NULL,
 	PRIMARY KEY (`id`),
 	CONSTRAINT `fk_class_course`
 	FOREIGN KEY (`course_id`, `course_department_code`)
@@ -148,8 +146,8 @@ CREATE TABLE `course_class` (
 	FOREIGN KEY (`building_name`, `classroom_number`, `classroom_section`)
 	REFERENCES `classroom`(`building_name`, `number`, `section`),
 	CONSTRAINT `fk_class_account_instructor`
-	FOREIGN KEY (`instructor_account_username`)
-	REFERENCES `account`(`username`)
+	FOREIGN KEY (`instructor_account_id`)
+	REFERENCES `account`(`id`)
 ) ENGINE = InnoDB;
 
 CREATE TABLE `class_meeting_time` (
