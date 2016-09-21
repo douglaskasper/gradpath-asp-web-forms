@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using GradPath.App_Code.Model.Support;
 
 namespace GradPath.App_Code.Model
 {
@@ -9,14 +7,12 @@ namespace GradPath.App_Code.Model
     {
         public int Id { get; set; }
         public string SectionNumber { get; set; }
-        public int CourseId { get; set; }
-        public string CourseDepartmentCode { get; set; }
-        public DateTime DateStart { get; set; }
-        public DateTime DateEnd { get; set; }
+        public Course Course { get; set; }
+        public DateTimeSpan Dates { get; set; }
+        public List<ClassMeetingTime> MeetingTimes { get; set; }
         public string Status { get; set; }
-        public string BuildingName { get; set; }
-        public int ClassroomNumber { get; set; }
-        public string ClassroomSection { get; set; }
-        public int InstructorAccountId { get; set; }
+        public Classroom Classroom { get; set; }
+        public Account Instructor { get; set; }
+        public List<Course> Prerequisites { get; set; }
     }
 }

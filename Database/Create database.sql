@@ -38,7 +38,7 @@ DROP TABLE `account`;
 */
 
 CREATE TABLE `account` (
-	`id` INT NOT NULL,
+	`id` INT AUTO_INCREMENT NOT NULL,
 	`username` VARCHAR(50) NOT NULL,
 	`password` CHAR(128) NOT NULL,
 	`first_name` VARCHAR(50) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE `account` (
 	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE `account_path_search` (
+CREATE TABLE `graduation_path_search` (
     `id` INT AUTO_INCREMENT NOT NULL,
 	`option` VARCHAR(50) NOT NULL, /*[DEGREE, CONCENTRATION, ENTERING_QUARTER, COURSES_PER_QUARTER, DELIVERY_METHOD]*/
 	`value` VARCHAR(1000),
@@ -75,11 +75,12 @@ CREATE TABLE `building` (
 ) ENGINE = InnoDB;
 
 CREATE TABLE `classroom` (
+	`id` INT AUTO_INCREMENT NOT NULL,
     `campus_name` VARCHAR(20) NOT NULL,
 	`building_name` VARCHAR(20) NOT NULL,
 	`number` INT NOT NULL,
 	`section` CHAR(10),
-	PRIMARY KEY (`building_name`, `number`, `section`),
+	PRIMARY KEY (`id`),
 	CONSTRAINT `fk_classroom_building_name`
 	FOREIGN KEY (`campus_name`, `building_name`)
 	REFERENCES `building`(`campus_name`, `name`)
@@ -102,14 +103,15 @@ CREATE TABLE `department` (
 ) ENGINE = InnoDB;
 
 CREATE TABLE `course` (
-	`id` INT NOT NULL,
+	`id` INT AUTO_INCREMENT NOT NULL,
+	`number` INT NOT NULL,
 	`department_code` CHAR(3) NOT NULL,
-	`people_soft_number` INT NOT NULL, /*?*/
+	`people_soft_number` INT, /*?*/
 	`title` VARCHAR(50),
 	`description` VARCHAR(1000),
 	`units` DECIMAL(3,2) DEFAULT '4.00',
 	`status` CHAR(10) DEFAULT 'ACTIVE', /*[ACTIVE, DORMANT (no activity in last 2 years)], might just be in logic to check?*/
-	PRIMARY KEY (`id`, `department_code`),
+	PRIMARY KEY (`id`),
     CONSTRAINT `fk_course_department`
 	FOREIGN KEY (`department_code`)
 	REFERENCES `department`(`code`)
@@ -117,34 +119,29 @@ CREATE TABLE `course` (
 
 CREATE TABLE `course_prerequisite` (
 	`course_id` INT NOT NULL,
-	`course_department_code` CHAR(3) NOT NULL,
 	`id` INT NOT NULL,
-	`department_code` CHAR(3) NOT NULL,
-	PRIMARY KEY (`course_id`, `course_department_code`, `id`, `department_code`),
+	PRIMARY KEY (`course_id`, `id`),
 	CONSTRAINT `fk_course_prerequisite_course`
-	FOREIGN KEY (`course_id`, `course_department_code`)
-	REFERENCES `course`(`id`, `department_code`)
+	FOREIGN KEY (`course_id`)
+	REFERENCES `course`(`id`)
 ) ENGINE = InnoDB;
 
 CREATE TABLE `course_class` (
 	`id` INT AUTO_INCREMENT NOT NULL,
 	`section_number` CHAR(5),
 	`course_id` INT NOT NULL,
-	`course_department_code` CHAR(3) NOT NULL,
 	`date_start` DATE,
 	`date_end` DATE,
 	`status` VARCHAR(10), /*[OPEN, WAIT_LIST etc.]*/
-    `building_name` VARCHAR(20),
-	`classroom_number` INT,
-    `classroom_section` CHAR(10),
+	`classroom_id` INT,
 	`instructor_account_id` INT NOT NULL,
 	PRIMARY KEY (`id`),
 	CONSTRAINT `fk_class_course`
-	FOREIGN KEY (`course_id`, `course_department_code`)
-	REFERENCES `course`(`id`, `department_code`),
+	FOREIGN KEY (`course_id`)
+	REFERENCES `course`(`id`),
     CONSTRAINT `fk_class_classroom`
-	FOREIGN KEY (`building_name`, `classroom_number`, `classroom_section`)
-	REFERENCES `classroom`(`building_name`, `number`, `section`),
+	FOREIGN KEY (`classroom_id`)
+	REFERENCES `classroom`(`id`),
 	CONSTRAINT `fk_class_account_instructor`
 	FOREIGN KEY (`instructor_account_id`)
 	REFERENCES `account`(`id`)
@@ -163,17 +160,25 @@ CREATE TABLE `class_meeting_time` (
 
 CREATE TABLE `degree_requirement` (
 	`degree_name` VARCHAR(20) NOT NULL,
-	`course_id` INT NOT NULL,
-	`course_department_code` CHAR(3) NOT NULL,
+	`course_id` INT,
 	`status` CHAR(10) NOT NULL DEFAULT 'REQUIRED',
 	`elective_department_code` CHAR(3),
-	PRIMARY KEY (`degree_name`, `course_id`, `course_department_code`),
+	PRIMARY KEY (`degree_name`, `course_id`),
     CONSTRAINT `fk_degree_requirement_degree`
 	FOREIGN KEY (`degree_name`)
 	REFERENCES `degree`(`name`),
 	CONSTRAINT `fk_degree_requirement_course`
-	FOREIGN KEY (`course_id`, `course_department_code`)
-	REFERENCES `course`(`id`, `department_code`),
+	FOREIGN KEY (`course_id`)
+	REFERENCES `course`(`id`),
 	FOREIGN KEY (`elective_department_code`) REFERENCES `department`(`code`)
 ) ENGINE = InnoDB;
 
+CREATE TABLE `account_class_history` (
+	`account_id` INT NOT NULL,
+	`class_id` INT NOT NULL,
+    `grade` CHAR(5),
+	PRIMARY KEY (`account_id`, `class_id`),
+	CONSTRAINT `fk_class_history_class`
+	FOREIGN KEY (`class_id`)
+	REFERENCES `course_class`(`id`)
+) ENGINE = InnoDB;

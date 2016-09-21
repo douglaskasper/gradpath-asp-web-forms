@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace GradPath.App_Code.Model
 {
@@ -12,5 +9,6 @@ namespace GradPath.App_Code.Model
         public string College { get; set; }
         public string Concentration { get; set; }
         public string Description { get; set; }
+        public List<DegreeRequirement> Requirements { get; set; }
     }
 }
