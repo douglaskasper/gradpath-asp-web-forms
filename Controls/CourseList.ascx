@@ -21,22 +21,22 @@
         <ItemTemplate>
                 <tr>
                     <td>
-                        <%# Eval("id") %>
+                        <%# DataBinder.Eval(Container.DataItem, "Id") %>
                     </td>
                     <td>
-                        <%# Eval("department") %>
+                        <%# DataBinder.Eval(Container.DataItem, "Department.Code") %>
                     </td>
                     <td>
-                        <%# Eval("people_soft_number") %>
+                        <%# DataBinder.Eval(Container.DataItem, "PeopleSoftNumber") %>
                     </td>
                     <td>
-                        <%# Eval("title") %>
+                        <%# DataBinder.Eval(Container.DataItem, "Title") %>
                     </td>
                     <td>
-                        <%# Eval("description") %>
+                        <%# DataBinder.Eval(Container.DataItem, "Description") %>
                     </td>
                     <td>
-                        <%# Eval("units") %>
+                        <%# DataBinder.Eval(Container.DataItem, "Units") %>
                     </td>
                 </tr>                     
         </ItemTemplate>

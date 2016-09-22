@@ -53,12 +53,12 @@ namespace GradPath.App_Code.DAL
             foreach (var courseInfo in query)
             {
                 Course course = new Course();
-                course.id = courseInfo.id;
-                course.department = courseInfo.department;
-                course.people_soft_number = courseInfo.people_soft_number;
-                course.title = courseInfo.title;
-                course.description = courseInfo.description;
-                course.units = courseInfo.units;
+                course.Id = courseInfo.id;
+                course.Department = new Department { Code = courseInfo.department };
+                course.PeopleSoftNumber= courseInfo.people_soft_number;
+                course.Title = courseInfo.title;
+                course.Description = courseInfo.description;
+                course.Units = courseInfo.units;
 
                 courses.Add(course);
             }
