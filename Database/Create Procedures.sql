@@ -5,8 +5,7 @@ CREATE PROCEDURE account_create (
     IN in_password VARCHAR(50),
     IN in_first_name VARCHAR(50),
     IN in_last_name VARCHAR(50),
-    IN in_role VARCHAR(10),
-	OUT out_account_id INT
+    IN in_role VARCHAR(10)
 	)
 BEGIN
 	INSERT INTO `csc394group5`.`account` (
@@ -22,8 +21,15 @@ BEGIN
 		'Kasper',
 		'STUDENT'
 		);
-        
-	SELECT LAST_INSERT_ID();
+	
+    SELECT	`id` AS acc_id,
+			`username` AS acc_username,
+			`password` AS acc_password,
+			`first_name` AS acc_first_name,
+			`last_name` AS acc_last_name,
+			`role` AS acc_role
+	FROM csc394group5.account acc
+	WHERE acc.id = LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
@@ -34,12 +40,12 @@ CREATE PROCEDURE account_login (
     IN in_password VARCHAR(50)
 	)
 BEGIN
-	SELECT	`id` AS id,
-			`username` AS username,
-			`password` AS password,
-			`first_name` AS first_name,
-			`last_name` AS last_name,
-			`role` AS role
+	SELECT	`id` AS acc_id,
+			`username` AS acc_username,
+			`password` AS acc_password,
+			`first_name` AS acc_first_name,
+			`last_name` AS acc_last_name,
+			`role` AS acc_role
 	FROM csc394group5.account acc
 	WHERE acc.username = in_username
 		AND acc.password = SHA(in_password);
@@ -67,11 +73,11 @@ BEGIN
     IF TRIM(in_role) = '' THEN SET in_role = NULL;
 	END IF;
     
-	SELECT	acc.`id` AS id,
-			acc.`username` AS username,
-			acc.`first_name` AS first_name,
-			acc.`last_name` AS last_name,
-			acc.`role` AS role
+	SELECT	acc.`id` AS acc_id,
+			acc.`username` AS acc_username,
+			acc.`first_name` AS acc_first_name,
+			acc.`last_name` AS acc_last_name,
+			acc.`role` AS acc_role
 	FROM `csc394group5`.`account` acc
     WHERE (acc.`id` = in_id OR in_id IS NULL)
 		AND (acc.`username` = in_username OR in_username IS NULL)
@@ -99,7 +105,12 @@ BEGIN
 		in_account_id
     );
     
-    SELECT LAST_INSERT_ID();
+	SELECT	gra.`id` AS gra_id,
+			gra.`option` AS gra_option,
+			gra.`value` AS gra_value,
+			gra.`account_id` AS gra_account_id
+	FROM `csc394group5`.`graduation_path_search` gra
+    WHERE gra.`id` = LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
@@ -110,13 +121,18 @@ CREATE PROCEDURE graduation_path_search_retrieve (
     IN in_account_id INT
 	)
 BEGIN
-	SELECT	path.`id` AS id,
-			path.`option`,
-			path.`value` AS value,
-			path.`account_id` AS account_id
-	FROM `csc394group5`.`graduation_path_search` path
-    WHERE (path.`id` = in_path_id OR in_path_id IS NULL)
-		AND (path.`account_id` = in_account_id OR in_account_id IS NULL);
+	IF TRIM(in_path_id) = '' THEN SET in_path_id = NULL;
+	END IF;
+    IF TRIM(in_account_id) = '' THEN SET in_account_id = NULL;
+	END IF;
+    
+	SELECT	gra.`id` AS gra_id,
+			gra.`option` AS gra_option,
+			gra.`value` AS gra_value,
+			gra.`account_id` AS gra_account_id
+	FROM `csc394group5`.`graduation_path_search` gra
+    WHERE (gra.`id` = in_path_id OR in_path_id IS NULL)
+		AND (gra.`account_id` = in_account_id OR in_account_id IS NULL);
 END$$
 DELIMITER ;
 
@@ -130,12 +146,14 @@ CREATE PROCEDURE degree_retrieve (
 BEGIN
 	IF TRIM(in_degree_name) = '' THEN SET in_degree_name = NULL;
 	END IF;
+    IF TRIM(in_college) = '' THEN SET in_college = NULL;
+	END IF;
         
-	SELECT	deg.`name` AS name,
-			deg.`title` AS title,
-			deg.`college` AS college,
-			deg.`concentration` AS concentration,
-			deg.`description` AS description
+	SELECT	deg.`name` AS deg_name,
+			deg.`title` AS deg_title,
+			deg.`college` AS deg_college,
+			deg.`concentration` AS deg_concentration,
+			deg.`description` AS deg_description
 	FROM `csc394group5`.`degree` deg
     WHERE (deg.`name` = in_degree_name OR in_degree_name IS NULL)
 		AND (deg.`college` = in_college OR in_college IS NULL);
@@ -156,14 +174,33 @@ CREATE PROCEDURE course_retrieve (
     IN in_requirement_of_degree_name INT
 	)
 BEGIN
-	SELECT	cou.`id` AS id,
-			cou.`number` AS number,
-			cou.`department_code` AS department_code,
-			cou.`people_soft_number` AS people_soft_number,
-			cou.`title` AS title,
-			cou.`description` AS description,
-			cou.`units` AS units,
-			cou.`status` AS status
+	IF TRIM(in_course_id) = '' THEN SET in_course_id = NULL;
+	END IF;
+    IF TRIM(in_course_number) = '' THEN SET in_course_number = NULL;
+	END IF;
+    IF TRIM(in_department_code) = '' THEN SET in_department_code = NULL;
+	END IF;
+    IF TRIM(in_title) = '' THEN SET in_title = NULL;
+	END IF;
+    IF TRIM(in_description) = '' THEN SET in_description = NULL;
+	END IF;
+    IF TRIM(in_units) = '' THEN SET in_units = NULL;
+	END IF;
+    IF TRIM(in_status) = '' THEN SET in_status = NULL;
+	END IF;
+    IF TRIM(in_prerequisite_of_course_id) = '' THEN SET in_prerequisite_of_course_id = NULL;
+	END IF;
+    IF TRIM(in_requirement_of_degree_name) = '' THEN SET in_requirement_of_degree_name = NULL;
+	END IF;
+    
+	SELECT	cou.`id` AS cou_id,
+			cou.`number` AS cou_number,
+			cou.`department_code` AS cou_department_code,
+			cou.`people_soft_number` AS cou_people_soft_number,
+			cou.`title` AS cou_title,
+			cou.`description` AS cou_description,
+			cou.`units` AS cou_units,
+			cou.`status` AS cou_status
 	FROM `csc394group5`.`course` cou
     WHERE (cou.`id` = in_course_id OR in_course_id IS NULL)
 		AND (cou.`in_course_number` = in_course_number OR in_course_number IS NULL)
@@ -199,20 +236,35 @@ CREATE PROCEDURE class_retrieve (
     IN in_history_in_account_id INT
 	)
 BEGIN
-	SELECT	cla.`id` AS id,
-			cla.`section_number` AS section_number,
-			cla.`course_id` AS course_id,
-            cou.`number` AS course_number,
-            cou.`department_code` AS course_department_code,
-			cla.`date_start` AS date_start,
-			cla.`date_end` AS date_end,
-			cla.`status` AS status,
-			cla.`classroom_id` AS classroom_id,
-            roo.`number` AS classroom_number,
-            roo.`section` AS classroom_section,
-            roo.`building_name` AS building_name,
-            roo.`campus_name` AS campus_name,
-			cla.`instructor_account_id` AS instructor_account_id
+	IF TRIM(in_class_id) = '' THEN SET in_class_id = NULL;
+	END IF;
+    IF TRIM(in_section_number) = '' THEN SET in_section_number = NULL;
+	END IF;
+    IF TRIM(in_course_id) = '' THEN SET in_course_id = NULL;
+	END IF;
+    IF TRIM(in_course_number) = '' THEN SET in_course_number = NULL;
+	END IF;
+    IF TRIM(in_department_code) = '' THEN SET in_department_code = NULL;
+	END IF;
+    IF TRIM(in_status) = '' THEN SET in_status = NULL;
+	END IF;
+    IF TRIM(in_history_in_account_id) = '' THEN SET in_history_in_account_id = NULL;
+	END IF;
+    
+	SELECT	cla.`id` AS cla_id,
+			cla.`section_number` AS cla_section_number,
+			cou.`course_id` AS cou_course_id,
+            cou.`number` AS cou_course_number,
+            cou.`department_code` AS cou_course_department_code,
+			cla.`date_start` AS cla_date_start,
+			cla.`date_end` AS cla_date_end,
+			cla.`status` AS cla_status,
+			roo.`classroom_id` AS roo_classroom_id,
+            roo.`number` AS roo_classroom_number,
+            roo.`section` AS roo_classroom_section,
+            roo.`building_name` AS roo_building_name,
+            roo.`campus_name` AS roo_campus_name,
+			cla.`instructor_account_id` AS cla_instructor_account_id
 	FROM `csc394group5`.`course_class` cla
     INNER JOIN `csc394group5`.`course` cou ON cla.`course_id` = cou.`id`
     INNER JOIN `csc394group5`.`classroom` roo ON roo.`id` = cla.`classroom_id`

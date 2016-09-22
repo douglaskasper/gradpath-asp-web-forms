@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GradPath", "C:\GradPath\", "{78CA0B24-A37A-4952-B9CE-78059011F6D5}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GradPath", ".", "{78CA0B24-A37A-4952-B9CE-78059011F6D5}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_50647"
