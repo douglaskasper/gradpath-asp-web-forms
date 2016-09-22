@@ -1,10 +1,34 @@
 ﻿# CSC 394 - Capstone Project, DePaul Graduation Path
 
+### Developer notes:
+All methods in `\App_Code\DAL\` helper classes return lists of objects (either from a MySQL database in `MySqlHelper.cs`, or a simple hard-coded list in `DummyDataHelper.cs`). 
+
+Use DummyDataHelper `\App_Code\DAL\DummyDataHelper.cs` to get hard-coded data without a database connection.  Add list items within these helper methods to simulate the data you need.
+
+#### Example usage:
+```C#
+  // Get a list of courses (in this case all the courses w/ no filtering)
+  List<Course> courses = new List<Course>();
+  courses = DummyDataHelper.CourseRetrieveAll();
+  
+  // Iterate through each course returned.
+  foreach (Course course in courses)
+  {
+      int id = course.Id;
+      string departmentCode = course.Department.Code;
+      int peopleSoftNumber = course.PeopleSoftNumber;
+      string title = course.Title;
+      string description = course.Description;
+      decimal units = course.Units;
+      ..
+  }
+```
+
 ### Website
 ASP.NET (C#) Web App.
 
 ### Database
-Currently using SQLite database, located in `\App_Data`. This will be replaced by a MySQL(most likely) database. SQL database creation and scripts in `\Database`.
+MySQL. Database creation scripts and model diagram in `\Database`.
 
 ### Project Requirements
 #### UI
