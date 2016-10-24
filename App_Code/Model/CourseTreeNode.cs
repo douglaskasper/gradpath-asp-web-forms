@@ -9,8 +9,8 @@ namespace GradPath.App_Code.Model
     {
         private CourseTree Tree;
         public Course Course;
-        public List<CourseTreeNode> Parents;
-        public List<CourseTreeNode> Children;
+        public List<CourseTreeNode> Parents = new List<CourseTreeNode>();
+        public List<CourseTreeNode> Children = new List<CourseTreeNode>();
 
         public CourseTreeNode(CourseTree Tree, Course Course)
         {

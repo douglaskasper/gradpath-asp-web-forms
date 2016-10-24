@@ -224,7 +224,6 @@ namespace GradPath.App_Code.DAL
             course.Id = courseId;
             course.Number = courseNumber;
             course.Department = new Department { Code = departmentCode };
-            course.PeopleSoftNumber = 12121212;
             course.Title = title;
             course.Description = description;
             course.Units = units;
@@ -241,16 +240,77 @@ namespace GradPath.App_Code.DAL
 
             Course course = new Course();
 
-            course.Id = 83334;
+            course.Id = 004;
             course.Number = 394;
             course.Department = new Department { Code = "CSC" };
-            course.PeopleSoftNumber = 12121212;
             course.Title = "Capstone: Software Project";
             course.Description = "Design and build a software project";
             course.Units = Convert.ToDecimal(4.00);
             course.Status = "ACTIVE";
+            course.PrereqOf = new List<Course>();
+            course.Prereqs = new List<Course>();
+
+            Course course2 = new Course();
+
+            course2.Id = 003;
+            course2.Number = 33;
+            course2.Department = new Department { Code = "CSC" };
+            course2.Title = "Intro to other things";
+            course2.Description = "Required for the capstone";
+            course2.Units = Convert.ToDecimal(4.00);
+            course2.Status = "ACTIVE";
+            course2.PrereqOf = new List<Course>();
+            course2.Prereqs = new List<Course>();
+
+            Course course3 = new Course();
+
+            course3.Id = 002;
+            course3.Number = 142;
+            course3.Department = new Department { Code = "CSC" };
+            course3.Title = "Stuff";
+            course3.Description = "Required for the intro course";
+            course3.Units = Convert.ToDecimal(4.00);
+            course3.Status = "ACTIVE";
+            course3.PrereqOf = new List<Course>();
+            course3.Prereqs = new List<Course>();
+
+            Course course4 = new Course();
+
+            course4.Id = 001;
+            course4.Number = 148;
+            course4.Department = new Department { Code = "CSC" };
+            course4.Title = "Things";
+            course4.Description = "Required for the intro course";
+            course4.Units = Convert.ToDecimal(4.00);
+            course4.Status = "ACTIVE";
+            course4.PrereqOf = new List<Course>();
+            course4.Prereqs = new List<Course>();
+
+            Course course5 = new Course();
+
+            course5.Id = 007;
+            course5.Number = 333;
+            course5.Department = new Department { Code = "CSC" };
+            course5.Title = "Elective";
+            course5.Description = "Not required, has no prerequisites";
+            course5.Units = Convert.ToDecimal(4.00);
+            course5.Status = "ACTIVE";
+            course5.PrereqOf = new List<Course>();
+            course5.Prereqs = new List<Course>();
+
+            course.Prereqs.Add(course2);
+            course2.PrereqOf.Add(course);
+            course2.Prereqs.Add(course3);
+            course3.PrereqOf.Add(course2);
+            course4.PrereqOf.Add(course2);
+
+
 
             courses.Add(course);
+            courses.Add(course2);
+            courses.Add(course3);
+            courses.Add(course4);
+            courses.Add(course5);
 
             return courses;
         }

@@ -17,25 +17,15 @@ namespace GradPath.App_Code.Model
         public CourseTree(List<Course> requiredCourses)
         {
             Count = 0;
-            Root = null;
-            List<Course> SortedCourses = requiredCourses.Sort();
-            //Create a dummy course to serve as the root
-            Course dummy = new Course();
-            dummy.Id = 00000;
-            dummy.Number = 000;
-            dummy.Department = new Department { Code = "NUL" };
-            dummy.PeopleSoftNumber = 00000000;
-            dummy.Title = "Root";
-            dummy.Description = "Root course";
-            dummy.Units = Convert.ToDecimal(0);
-            dummy.Status = "ACTIVE";
-            Root = new CourseTreeNode(this, dummy);
+            List<Course> SortedCourses = requiredCourses;
+            SortedCourses.Sort();
+            
             //add each course to the 'tree'
             while (SortedCourses.Count > 0)
             {
-                foreach (Course Course in SortedCourses)
+                foreach (Course Course in SortedCourses.ToArray())
                 {
-                    if (Course.Prereqs.Count == 0 || ContainsAllCourses(Course.Prereqs)) {
+                    if (Course.PrereqOf.Count == 0 || ContainsAllCourses(Course.PrereqOf)) {
                         AddNode(new CourseTreeNode(this, Course));
                         Count += 1;
                         Courses.Add(Course.Id);
@@ -68,21 +58,22 @@ namespace GradPath.App_Code.Model
             else
             {
                 foreach (CourseTreeNode Node in curr.Children)
-                    GetNode(Node, CourseID);
+                   return GetNode(Node, CourseID);
             }
+            return Root;
         }
         //add a node to the tree
         public void AddNode(CourseTreeNode Node)
         {
             //Connect to parents
-            if (Node.Course.Prereqs.Length == 0) {
-                Node.Parents.Add(Root);
+            if (Node.Course.PrereqOf.Count == 0) {
+                Node.Parents.Add(getRoot());
                 Root.Children.Add(Node);
             }
             else
-                foreach (Course Pre in Node.Course.Prereqs)
+                foreach (Course req in Node.Course.PrereqOf)
                 {
-                    CourseTreeNode Temp = GetNode(Root, Pre);
+                    CourseTreeNode Temp = GetNode(getRoot(), req.Id);
                     Node.Parents.Add(Temp);
                     Temp.Children.Add(Node);
                 }
@@ -103,6 +94,23 @@ namespace GradPath.App_Code.Model
             }
             ListResult.Add(Node.Course);
 
+        }
+        public CourseTreeNode getRoot()
+        {
+            if (Root == null)
+            {
+                //Create a dummy course to serve as the root
+                Course dummy = new Course();
+                dummy.Id = 00000;
+                dummy.Number = 000;
+                dummy.Department = new Department { Code = "NUL" };
+                dummy.Title = "Root";
+                dummy.Description = "Root course";
+                dummy.Units = 0.0M;
+                dummy.Status = "ACTIVE";
+                Root = new CourseTreeNode(this, dummy);
+            }
+            return Root;
         }
     }
 }

@@ -402,7 +402,6 @@ namespace GradPath.App_Code.DAL
                             course.Id = Convert.ToInt32(dataRow["cou_id"]);
                             course.Number = Convert.ToInt32(dataRow["cou_number"]);
                             course.Department = new Department { Code = Convert.ToString(dataRow["cou_department_code"]) };
-                            course.PeopleSoftNumber = Convert.ToInt32(dataRow["cou_people_soft_number"]);
                             course.Title = Convert.ToString(dataRow["cou_title"]);
                             course.Description = Convert.ToString(dataRow["cou_description"]);
                             course.Units = Convert.ToDecimal(dataRow["cou_units"]);

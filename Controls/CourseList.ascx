@@ -11,7 +11,6 @@
                     <tr>
                         <th>ID</th>
                         <th>Department</th>
-                        <th>People Soft Number</th>
                         <th>Title</th>
                         <th>Description</th>
                         <th>Units</th>
@@ -25,9 +24,6 @@
                     </td>
                     <td>
                         <%# DataBinder.Eval(Container.DataItem, "Department.Code") %>
-                    </td>
-                    <td>
-                        <%# DataBinder.Eval(Container.DataItem, "PeopleSoftNumber") %>
                     </td>
                     <td>
                         <%# DataBinder.Eval(Container.DataItem, "Title") %>
@@ -45,4 +41,8 @@
         </FooterTemplate>
     </asp:Repeater>
 
+</div>
+<div class="well">
+    <h4>Tree Test (Reccommended Path)</h4>
+    <span><% =testTree().ToString() %></span>
 </div>

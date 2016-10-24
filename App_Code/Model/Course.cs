@@ -12,18 +12,23 @@ namespace GradPath.App_Code.Model
         public string Description { get; set; }
         public decimal Units { get; set; }
         public string Status { get; set; }
+        public int PeopleSoftNumber { get; set; }
         public List<Course> Prereqs { get; set; }
         public List<Course> PrereqOf { get; set; }
 
         //make sortable using course ID
-        public int CompareTo(object obj)
+        public int CompareTo(Course other)
         {
-            if (Id < obj.Id)
+            if (Id < other.Id)
                 return -1;
-            else if (Id > obj.Id)
+            else if (Id > other.Id)
                 return 1;
             else
                 return 0;
+        }
+        public override string ToString()
+        {
+            return Title;
         }
     }
 }
