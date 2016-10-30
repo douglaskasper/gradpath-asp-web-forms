@@ -28,5 +28,21 @@ public partial class Controls_CourseList : System.Web.UI.UserControl
             repeater_courses.DataSource = courses;
             repeater_courses.DataBind();
         }
+        
+    }
+    protected string testTree()
+    {
+        List<Course> courses = new List<Course>();
+        courses = DummyDataHelper.CourseRetrieveAll();
+        CourseTree testTree = new CourseTree(courses);
+        List<Course> testCourseList = new List<Course>();
+        testCourseList = testTree.GetList();
+        string result = "";
+        foreach (Course course in testCourseList)
+        {
+            result = result + course.ToString() + " -> ";
+        }
+        result = result + "Degree!!!";
+        return result;
     }
 }
